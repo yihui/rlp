@@ -1,0 +1,84 @@
+<!--
+  %\VignetteIndexEntry{Use the Two-column Docco Style}
+  %\VignetteEngine{knitr::docco_classic_notangle}
+  %\VignetteEncoding{UTF-8}
+-->
+
+# Use the Two-column Docco Style
+
+The two-column [Docco](https://github.com/jashkenas/docco) style is one of my favorite HTML layouts for R Markdown (v1) output. You can use the vignette engine `knitr::docco_classic`, or the function `knitr::rocco()` to compile an R Markdown document to HTML using this style. The main feature of this layout is that it arranges text in the left column, and code in the right column.
+
+# Setup
+
+Just like the vignette [LP-demo1](LP-demo1.html), we set up some **knitr** chunk options first.
+
+```{r setup, purl=FALSE}
+knitr::opts_chunk$set(eval = FALSE, tidy = FALSE)
+```
+
+# A Markdown Generator
+
+First we create a list `md` with a few function members to generate raw Markdown output.
+
+```{r}
+#' A Markdown generator
+#' 
+#' You can generate Markdown text using the function elements of this object.
+#' @return Each function element returns a character vector.
+#' @export
+#' @examples md$b('bold'); md$em('emphasize'); md$ul(head(letters))
+md = local({
+```
+
+I'm using `local()` here because I want to create a local function `enclose()` below, which wraps its argument `x` by a character string `by`:
+
+```{r}
+  enclose = function(x, by = '') paste0(by, x, by)
+```
+
+Then `md` is basically a list of members `b` (**bold**), `em` (_emphasize_), `code`, `link`, `ol` (ordered list), and `ul` (unordered list):
+
+```{r}
+  list(
+       b = function(x) enclose(x, '**'),
+      em = function(x) enclose(x, '_'),
+    code = function(x) enclose(x, '`'),
+    link = function(href, text) sprintf('[%s](%s)', text, href),
+      ol = function(x) sprintf('1. %s\n', x),
+      ul = function(x) sprintf('- %s\n', x)
+  )
+})
+```
+
+# Examples
+
+Now we show some text output, including plain R console output as well as Markdown output.
+
+```{r eval=TRUE, purl=FALSE}
+1 + 1
+10:1 + 10
+dnorm(0)
+```
+
+For raw Markdown output, you need the chunk option `results = 'asis'`.
+
+```{r eval=TRUE, purl=FALSE, results='asis'}
+library(rlp)
+cat(
+  'Show some raw Markdown content here. ',
+  'This is ', md$b('bold'), ' and ', md$em('emphasized'), '. ',
+  'Also a code fragment ', md$code('fivenum(1:10)'), '. ',
+  'A link to ', md$link('http://www.r-project.org', 'R homepage'), '. ',
+  '\n\n',
+  'An ordered list:\n\n', md$ol(head(letters)),
+  '\n\n',
+  'An unordered list:\n\n', md$ul(head(LETTERS)),
+  sep = ''
+)
+```
+
+You can display a table as well.
+
+```{r eval=TRUE, purl=FALSE}
+knitr::kable(head(iris))
+```
