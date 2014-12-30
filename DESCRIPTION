@@ -1,7 +1,7 @@
 Package: rlp
 Type: Package
 Title: An Example of Using Literate Programming for R Package Development
-Version: 0.0.1
+Version: 0.0.2
 Date: 2014-12-26
 Authors@R: as.person(c(
     "Joe Cheng [aut]",
