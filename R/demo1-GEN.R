@@ -48,7 +48,7 @@ mle_gamma = function(data, start = c(1, 1), vcov = FALSE) {
 #' @export
 rbinormal = function(n, m1 = 0, m2 = 0, s1 = 1, s2 = 1, rho = 0) {
   # warning: this is not an efficient implementation; you should use
-  # vectorization the code in practice
+  # vectorization in practice
   res = replicate(n, {
     x = rnorm(1, m1, s1)  # simulate from the marginal f(x)
     m2cond = m2 + s2/s1 * rho * (x - m1)  # conditional mean of Y

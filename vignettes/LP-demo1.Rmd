@@ -247,7 +247,7 @@ One way to simulate from the bivariate Normal distribution is to first simulate 
 #' @export
 rbinormal = function(n, m1 = 0, m2 = 0, s1 = 1, s2 = 1, rho = 0) {
   # warning: this is not an efficient implementation; you should use
-  # vectorization the code in practice
+  # vectorization in practice
   res = replicate(n, {
     <<simulate_x>>
     <<simulate_y>>
