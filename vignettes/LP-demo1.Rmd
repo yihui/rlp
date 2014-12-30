@@ -246,6 +246,8 @@ One way to simulate from the bivariate Normal distribution is to first simulate 
 #' @return A numeric matrix of two columns X and Y.
 #' @export
 rbinormal = function(n, m1 = 0, m2 = 0, s1 = 1, s2 = 1, rho = 0) {
+  # warning: this is not an efficient implementation; you should use
+  # vectorization the code in practice
   res = replicate(n, {
     <<simulate_x>>
     <<simulate_y>>
@@ -283,7 +285,7 @@ plot(z, pch = 20, col = 'darkgray')
 points(-1, 3, pch = 19, col = 'red')  # the center of the bivariate dist
 ```
 
-In this example, I factored out the code from the main function as two separate code chunks, and explained each later, instead of inserting the explanations in the middle of the function body. Again, the simulation code in this example is computationally inefficient, and it is only for demo purposes.
+In this example, I factored out the code from the main function as two separate code chunks, and explained each later, instead of inserting the explanations in the middle of the function body. Again, the simulation code in this example is computationally inefficient, and it is only for demo purposes^[It is straightforward to make it much more efficient by vectorization, i.e., instead of using `replicate()`, which is basically a loop to generate one random number at a time, you can just generate all `n` random numbers in one step: `x = rnorm(n, m1, s1)`, and `y = rnorm(n, m2cond, s2cond)`.].
 
 # Conclusions
 
