@@ -228,7 +228,7 @@ Y
 <span class="co">#' @export</span>
 rbinormal =<span class="st"> </span>function(n, <span class="dt">m1 =</span> <span class="dv">0</span>, <span class="dt">m2 =</span> <span class="dv">0</span>, <span class="dt">s1 =</span> <span class="dv">1</span>, <span class="dt">s2 =</span> <span class="dv">1</span>, <span class="dt">rho =</span> <span class="dv">0</span>) {
   <span class="co"># warning: this is not an efficient implementation; you should use</span>
-  <span class="co"># vectorization the code in practice</span>
+  <span class="co"># vectorization in practice</span>
   res =<span class="st"> </span><span class="kw">replicate</span>(n, {
     x =<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">1</span>, m1, s1)  <span class="co"># simulate from the marginal f(x)</span>
     m2cond =<span class="st"> </span>m2 +<span class="st"> </span>s2/s1 *<span class="st"> </span>rho *<span class="st"> </span>(x -<span class="st"> </span>m1)  <span class="co"># conditional mean of Y</span>
