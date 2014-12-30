@@ -47,11 +47,13 @@ mle_gamma = function(data, start = c(1, 1), vcov = FALSE) {
 #' @return A numeric matrix of two columns X and Y.
 #' @export
 rbinormal = function(n, m1 = 0, m2 = 0, s1 = 1, s2 = 1, rho = 0) {
+  # warning: this is not an efficient implementation; you should use
+  # vectorization the code in practice
   res = replicate(n, {
     x = rnorm(1, m1, s1)  # simulate from the marginal f(x)
     m2cond = m2 + s2/s1 * rho * (x - m1)  # conditional mean of Y
     s2cond = sqrt(1 - rho^2) * s2  # conditional sd of Y
-    y = rnorm(1, m2cond, s2cond)  # simulate from the marginal f(x)
+    y = rnorm(1, m2cond, s2cond)  # simulate from the conditional f(y|x)
     c(x, y)
   })
   res = t(res)  # transpose the 2xn matrix to nx2
