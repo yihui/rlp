@@ -16,7 +16,7 @@ Description: Instead of the traditional way of writing R code with comments
     R/ directory.
 License: MIT + file LICENSE
 Depends: R (>= 3.0.0)
-Suggests: knitr (>= 1.8), rmarkdown
+Suggests: knitr (>= 1.8.12), rmarkdown
 VignetteBuilder: knitr
 URL: https://github.com/yihui/rlp
 BugReports: https://github.com/yihui/rlp/issues
