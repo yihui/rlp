@@ -3,14 +3,7 @@
 \name{md}
 \alias{md}
 \title{A Markdown generator}
-\format{\preformatted{List of 6
- $ b   :function (x)  
- $ em  :function (x)  
- $ code:function (x)  
- $ link:function (href, text)  
- $ ol  :function (x)  
- $ ul  :function (x)  
-}}
+\format{An object of class \code{list} of length 6.}
 \usage{
 md
 }
