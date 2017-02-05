@@ -2,6 +2,9 @@
 title: "Write An R Package Using Literate Programming Techniques"
 author: "Yihui Xie"
 date: "`r Sys.Date()`"
+slug: rlp
+show_toc: yes
+githubEditURL: https://github.com/yihui/rlp/edit/master/vignettes/LP-demo1.Rmd
 output:
   knitr:::html_vignette:
     number_sections: yes
@@ -11,7 +14,7 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-This is an example of writing an R package using the [Literate Programming](http://en.wikipedia.org/wiki/Literate_programming) (LP) technique, implemented through the **knitr** package and Makefile. It only shows you the idea, and I do not mean you must use **knitr**, R Markdown, or Makefile. The full source code of this **rlp** package is available on Github: https://github.com/yihui/rlp. To build this package, you need to install R packages **knitr** and **rmarkdown**. Windows users also need to install [Rtools](http://cran.rstudio.com/bin/windows/Rtools/), which includes the utility `make`. Linux and OS X users should have `make` ready by default.
+This is an example of writing an R package using the [Literate Programming](http://en.wikipedia.org/wiki/Literate_programming) (LP) technique, implemented through the **knitr** package and Makefile. It only shows you the idea, and I do not mean you must use **knitr**, R Markdown, or Makefile. The full source code of this **rlp** package is available on [<i class="fa fa-github" aria-hidden="true"></i> Github](https://github.com/yihui/rlp). To build this package, you need to install R packages **knitr** and **rmarkdown**. Windows users also need to install [Rtools](http://cran.rstudio.com/bin/windows/Rtools/), which includes the utility `make`. Linux and macOS users should have `make` ready by default.
 
 # Literate Programming
 
@@ -62,12 +65,15 @@ I put this Rmd file under the `vignettes/` directory, and you do not have to use
 
 To extract the code chunks from the Rmd documents, I used a `Makefile` under the root directory of this package^[If you read the R Markdown source of this document, you will see I did not copy the Makefile here, but used the `cat` engine to write the Makefile dynamically to the output.]:
 
-```{r engine='cat', engine.opts=list(lang='Makefile'), code=readLines('../Makefile'), purl=FALSE}
+```{r eval=TRUE, purl=FALSE, include=FALSE}
+make = readLines('../Makefile')
+```
+```{r engine='cat', engine.opts=list(lang='Makefile'), code=make, purl=FALSE}
 ```
 
 I defined a function `purl` in the Makefile, which calls the R function `knitr::purl()` to extract code chunks from Rmd to R. To make sure I do not purl arbitrary Rmd documents, I added a prefix `LP-` to the Rmd filenames, and only these files will be processed. Similarly, to make sure `make` does not use arbitrary R files as targets, I added a suffix `-GEN` (stands for "generated") to the R filenames. To put it short, an Rmd file `vignettes/LP-foo.Rmd` will generate `R/foo-GEN.R`. The variable `rfiles` stores all the potential R scripts to be generated. If you are familiar with `make`, you will immediately see its advantage here: `foo-GEN.R` will be re-generated only if `LP-foo.Rmd` has been updated.
 
-You may have realized that this leads to two copies of R code: one copy in Rmd, and one in R. Therefore you need to remind your collaborators (if you have any) that they must not edit the R code under `R/` that is generated from Rmd, but should edit the Rmd source documents instead.
+You may have realized that this leads to two copies of R code: one copy in Rmd, and one in R. Therefore you need to remind your collaborators (if you have any) that they must not edit the R code under `R/` that is generated from Rmd, but should edit the Rmd source documents instead.^[Or set the R scripts to be read-only, e.g., use `Sys.chmod(mode = '0444')` in R.]
 
 # One Button to Rule Them All
 
@@ -79,24 +85,18 @@ Now we have three things to do to fully build this package:
 
 You certainly do not want to type these commands repeatedly. Unfortunately, due to the fact that this is not the standard process of building an R package, there is not a natural solution to combine the three steps into one. For power users, this is certainly not true -- you can always write a shell script to do everything. But some users just do not know how to open a terminal to type commands, and you should not blame them -- not all people do programming for a living, and a command window is not the only or ultimate solution of all problems.
 
-So let's start hacking and find a button to click. I have been secretly hacking the `Build & Reload` button in my RStudio IDE for a long time. If you open this package in RStudio, and go to `Tools -> Project Options -> Build Tools`, you will see a weird configuration:
+So let's start hacking and find a button to click. I have been secretly hacking the `Build & Reload` button in my RStudio IDE for a long time. If you open this **rlp** package in RStudio, and go to `Tools -> Project Options -> Build Tools`, you will see a weird configuration:
 
 ```bash
--v && Rscript -e "Rd2roxygen::rab(install=TRUE, before=system('make'))"
+-v && Rscript -e "Rd2roxygen::rab(install=TRUE,before=system('make'))"
 ```
 
 At this moment, I'm not going to explain what it means since it is just a dirty hack, and please do not ask me, either. Let's wait for the RStudio IDE to give us more freedom to customize the package build options in the future. If you are interested in the idea of LP for R packages, just copy my configuration, but bear in mind that it may stop working at some point. I will update this document when that happens.
 
-My hack above may require some of my packages under development, so you need to update them before you can really click the button `Build & Reload` in RStudio:
-
-```{r purl=FALSE}
-update.packages(repos = 'http://yihui.name/xran', type = 'source')
-```
-
 Note `Rd2roxygen::rab()` is my own way of building R packages, and you certainly do not have to follow it. For example, if you are more comfortable with **devtools**, you can do^[Remember to replace `rlp` with your package name.]:
 
 ```bash
--v && make -C rlp && Rscript -e "devtools::install('rlp', keep_source=TRUE)" #
+-v && make -C rlp && Rscript -e "devtools::install('rlp',keep_source=T)"
 ```
 
 # Call Functions in This Package
@@ -120,17 +120,17 @@ I will use the function `optim()` to optimize the log-likelihood function. First
 ```{r}
 #' MLE for the Gamma distribution
 #' 
-#' Estimate the parameters (alpha and beta) of the Gamma distribution using
-#' maximum likelihood.
+#' Estimate the parameters (alpha and beta) of the Gamma distribution
+#' using maximum likelihood.
 #' @param data the data vector assumed to be generated from the Gamma 
 #'   distribution
-#' @param start the initial values for the parameters of the Gamma distribution 
-#'   (passed to \code{\link{optim}()})
-#' @param vcov whether to return an approximate variance-covariance matrix of 
-#'   the parameter vector
-#' @return A list with elements \code{estimate} (parameter estimates for alpha 
-#'   and beta) and, if \code{vcov = TRUE}, \code{vcov} (the variance-covariance 
-#'   matrix of the parameter vector).
+#' @param start the initial values for the parameters of the Gamma
+#' distribution (passed to \code{\link{optim}()})
+#' @param vcov whether to return an approximate variance-covariance
+#' matrix of the parameter vector
+#' @return A list with elements \code{estimate} (parameter estimates
+#'   for alpha and beta) and, if \code{vcov = TRUE}, \code{vcov} (the
+#'   variance-covariance matrix of the parameter vector).
 #' @export
 mle_gamma = function(data, start = c(1, 1), vcov = FALSE) {
 ```
@@ -181,7 +181,7 @@ Finally, I give an estimate of the variance-covariance matrix $Var([\hat{\alpha}
 
 The estimate is the inverse of the negative Hessian matrix, because $Var(\hat{\theta})=I^{-1}(\theta)$ for the maximum likelihood estimator $\hat{\theta}$, where $I(\theta)$ is the Information matrix, and we know $I(\theta) = -E(H(\theta))$. In theory, $I(\theta)$ is unknown, and I just use the observed information matrix, i.e., the negative Hessian matrix returned from `optim()`. Note the inverse matrix is computed via `solve()`.
 
-```{r highlight=FALSE}
+```{r}
   res
 }
 ```
@@ -204,9 +204,9 @@ z = qnorm(1 - 0.05/2)  # 97.5% Normal quantile
 c(a - z * s, a + z * s)  # a 95% CI
 ```
 
-Below is a histogram of the simulated data, with the true density curve, the true mean (solid vertical line), and the estimated mean^[The mean of the Gamma distribution is $\alpha/\beta$.] (dashed line):
+Below is a histogram of the simulated data, with the true density curve, the true mean (solid vertical line), and the estimated mean (dashed line):^[The mean of the Gamma distribution is $\alpha/\beta$.]
 
-```{r eval=TRUE, purl=FALSE}
+```{r dgamma, eval=TRUE, purl=FALSE}
 par(mar = c(4, 4, .2, .1))
 hist(d, main = '', col = 'darkgray', border = 'white', freq = FALSE)
 curve(dgamma(x, shape = 5, rate = 2), 0, 6, add = TRUE, lwd = 2)
@@ -237,8 +237,8 @@ One way to simulate from the bivariate Normal distribution is to first simulate 
 ```{r}
 #' Sample from a bivariate Normal distribution
 #' 
-#' Simulate x from the marginal f(x), then y from f(y|x), and the pair (x, y) 
-#' has the desired joint distribution.
+#' Simulate x from the marginal f(x), then y from f(y|x), and
+#' the pair (x, y) has the desired joint distribution.
 #' @param n the desired sample size
 #' @param m1,m2 the means of X and Y, respectively
 #' @param s1,s2 the standard deviations of X and Y, respectively
@@ -259,7 +259,7 @@ rbinormal = function(n, m1 = 0, m2 = 0, s1 = 1, s2 = 1, rho = 0) {
 }
 ```
 
-If you are reading the source R Markdown document, you will see `<<simulate_x>>` and `<<simulate_y>>` instead of the real R code. The token `<<>>` denotes the code chunks defined below with the chunk labels `simulate_x` and `simulate_y`, respectively:
+If you are reading the [source R Markdown document](https://github.com/yihui/rlp/edit/master/vignettes/LP-demo1.Rmd), you will see `<<simulate_x>>` and `<<simulate_y>>` instead of the real R code. The token `<<>>` denotes the code chunks defined below with the chunk labels `simulate_x` and `simulate_y`, respectively:
 
 ```{r simulate_x, purl=FALSE}
 x = rnorm(1, m1, s1)  # simulate from the marginal f(x)
@@ -277,12 +277,13 @@ y = rnorm(1, m2cond, s2cond)  # simulate from the conditional f(y|x)
 
 I just reused these code chunks in the function body of `rbinormal()`, instead of cutting and pasting the code there. As usual, I can test my function by examples:
 
-```{r eval=TRUE, purl=FALSE}
+```{r binom-scatter, eval=TRUE, purl=FALSE}
 set.seed(1229)
 z = rbinormal(500, m1 = -1, s1 = 5, m2 = 3, s2 = .5, rho = -.7)
 par(mar = c(4, 4, .2, .1))
 plot(z, pch = 20, col = 'darkgray')
-points(-1, 3, pch = 19, col = 'red')  # the center of the bivariate dist
+# the center of the bivariate dist
+points(-1, 3, pch = 19, col = 'red', cex = 3)
 ```
 
 In this example, I factored out the code from the main function as two separate code chunks, and explained each later, instead of inserting the explanations in the middle of the function body. Again, the simulation code in this example is computationally inefficient, and it is only for demo purposes^[It is straightforward to make it much more efficient by vectorization, i.e., instead of using `replicate()`, which is basically a loop to generate one random number at a time, you can just generate all `n` random numbers in one step: `x = rnorm(n, m1, s1)`, and `y = rnorm(n, m2cond, s2cond)`.].
