@@ -6,4 +6,3 @@ all: $(rfiles)
 
 R/%-GEN.R: vignettes/LP-%.Rmd
 	$(call purl,$^,$@)
-
