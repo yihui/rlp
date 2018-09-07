@@ -88,7 +88,7 @@ You certainly do not want to type these commands repeatedly. Unfortunately, due 
 So let's start hacking and find a button to click. I have been secretly hacking the `Build & Reload` button in my RStudio IDE for a long time. If you open this **rlp** package in RStudio, and go to `Tools -> Project Options -> Build Tools`, you will see a weird configuration:
 
 ```bash
--v && Rscript -e "Rd2roxygen::rab(install=TRUE,before=system('make'))"
+-v && Rscript -e "Rd2roxygen::rab(install=T,before=system('make'))"
 ```
 
 At this moment, I'm not going to explain what it means since it is just a dirty hack, and please do not ask me, either. Let's wait for the RStudio IDE to give us more freedom to customize the package build options in the future. If you are interested in the idea of LP for R packages, just copy my configuration, but bear in mind that it may stop working at some point. I will update this document when that happens.
