@@ -96,7 +96,7 @@ At this moment, I'm not going to explain what it means since it is just a dirty 
 Note `Rd2roxygen::rab()` is my own way of building R packages, and you certainly do not have to follow it. For example, if you are more comfortable with **devtools**, you can do^[Remember to replace `rlp` with your package name.]:
 
 ```bash
--v && make -C rlp && Rscript -e "devtools::install('rlp',keep_source=T)"
+-v && make -C rlp && Rscript -e "devtools::install('rlp')"
 ```
 
 # Call Functions in This Package
