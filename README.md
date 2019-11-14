@@ -10,7 +10,7 @@ Markdown documents, and extract the code to the `R/` directory automatically via
 `knitr::purl()`. At the same time, you will get a nicely formatted output
 document displaying the source code chunks as well as the text/prose chunks, and
 this output document can be a package vignette. Please see the package homepage
-for more details: <http://yihui.name/rlp>. This package is licensed under MIT,
+for more details: <http://yihui.org/rlp>. This package is licensed under MIT,
 and you are welcome to file issues or submit pull requests.
 
 ## Acknowledgements
