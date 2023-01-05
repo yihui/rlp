@@ -5,7 +5,9 @@
 #' @export
 #' @examples md$b('bold'); md$em('emphasize'); md$ul(head(letters))
 md = local({
+
   enclose = function(x, by = '') paste0(by, x, by)
+
   list(
        b = function(x) enclose(x, '**'),
       em = function(x) enclose(x, '_'),

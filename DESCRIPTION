@@ -24,4 +24,5 @@ SystemRequirements: GNU make
 VignetteBuilder: knitr
 URL: https://github.com/yihui/rlp
 BugReports: https://github.com/yihui/rlp/issues
-RoxygenNote: 6.0.0
+RoxygenNote: 7.2.3
+Encoding: UTF-8

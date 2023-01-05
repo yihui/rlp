@@ -19,6 +19,6 @@ rbinormal(n, m1 = 0, m2 = 0, s1 = 1, s2 = 1, rho = 0)
 A numeric matrix of two columns X and Y.
 }
 \description{
-Simulate x from the marginal f(x), then y from f(y|x), and the pair (x, y) 
-has the desired joint distribution.
+Simulate x from the marginal f(x), then y from f(y|x), and
+the pair (x, y) has the desired joint distribution.
 }
