@@ -4,11 +4,11 @@
   %\VignetteEncoding{UTF-8}
 -->
 
-# Use the Two-column Docco Style
+## Use the Two-column Docco Style
 
 The two-column [Docco](https://github.com/jashkenas/docco) style is one of my favorite HTML layouts for R Markdown (v1) output. You can use the vignette engine `knitr::docco_classic`, or the function `knitr::rocco()` to compile an R Markdown document to HTML using this style. The main feature of this layout is that it arranges text in the left column, and code in the right column.
 
-# Setup
+## Setup
 
 Just like the vignette [LP-demo1](LP-demo1.html), we set up some **knitr** chunk options first.
 
@@ -16,7 +16,7 @@ Just like the vignette [LP-demo1](LP-demo1.html), we set up some **knitr** chunk
 knitr::opts_chunk$set(eval = FALSE, tidy = FALSE)
 ```
 
-# A Markdown Generator
+## A Markdown Generator
 
 First we create a list `md` with a few function members to generate raw Markdown output.
 
@@ -50,7 +50,7 @@ Then `md` is basically a list of members `b` (**bold**), `em` (_emphasize_), `co
 })
 ```
 
-# Examples
+## Examples
 
 Now we show some text output, including plain R console output as well as Markdown output.
 
