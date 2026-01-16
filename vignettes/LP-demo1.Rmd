@@ -3,7 +3,6 @@ title: "Write An R Package Using Literate Programming Techniques"
 author: "Yihui Xie"
 date: 2014-12-29
 slug: rlp
-show_toc: yes
 githubEditURL: https://github.com/yihui/rlp/edit/master/vignettes/LP-demo1.Rmd
 output:
   knitr:::html_vignette:
@@ -468,4 +467,4 @@ using comments in code. Not everyone needs or wants to understand your source
 code, but clear explanations of your code will benefit both your future self,
 and more importantly, attract potential collaborators and contributors, hence
 increase the [bus factor](http://en.wikipedia.org/wiki/Bus_factor) of your
-software packages, in this era of "[social coding](https://github.com)".
+software packages.
